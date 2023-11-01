@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+  options:
+    requirements-file: molecule/requirements.yml
+driver:
+  name: docker
+platforms:
+  - name: molecule-postgresql-default
+    image: docker.io/fbn587/molecule-ubuntu:jammy
+    pull: true
+    pre_build_image: true
+    override_command: false
+    volumes:
+      - /sys/fs/cgroup/molecule.scope:/sys/fs/cgroup:rw
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+      - /var/lib/journal
+    cgroupns_mode: host
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      callbacks_enabled: profile_tasks, timer, yaml
+  inventory:
+    links:
+      group_vars: inventory/group_vars/
+      #host_vars: inventory/host_vars/
+verifier:
+  name: ansible

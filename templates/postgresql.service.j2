@@ -1,0 +1,29 @@
+# Managed by Ansible
+
+[Unit]
+Description=PostgreSQL {{ postgresql_release }} database server
+Documentation=https://www.postgresql.org/docs/{{ postgresql_release }}/static/
+After=syslog.target network.target local-fs.target
+Requires=local-fs.target
+AssertPathIsDirectory={{ postgresql_data_dir }}/base
+AssertPathExists={{ postgresql_data_dir }}/PG_VERSION
+
+[Service]
+Type=notify
+User=postgres
+Group=postgres
+Environment=PG_OOM_ADJUST_FILE=/proc/self/oom_score_adj
+Environment=PG_OOM_ADJUST_VALUE=0
+ExecStart={{ postgresql_bin_dir }}/postgres -c config_file={{ postgresql_config_dir }}/postgresql.conf
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal={{ postgresql_shutdown_signals[postgresql_shutdown_mode] }}
+OOMScoreAdjust=-1000
+TimeoutSec=0
+TimeoutStartSec=0
+TimeoutStopSec=1h
+RuntimeDirectory=postgresql
+RuntimeDirectoryMode=755
+
+[Install]
+WantedBy=multi-user.target

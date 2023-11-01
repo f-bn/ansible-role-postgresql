@@ -1,0 +1,18 @@
+---
+- name: Ensure PostgreSQL user group exists
+  ansible.builtin.group:
+    name: postgres
+    state: present
+
+- name: Ensure PostgreSQL user account exists
+  ansible.builtin.user:
+    name: postgres
+    home: "{{ postgresql_home_dir }}"
+    create_home: false
+    shell: /bin/bash
+    group: postgres
+    comment: "PostgreSQL server user"
+    password_lock: true
+    update_password: on_create
+    system: true
+    state: present

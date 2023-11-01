@@ -1,0 +1,21 @@
+---
+# Tasks for 'postgresql' role
+
+- name: Defines PostgreSQL release version
+  ansible.builtin.set_fact:
+    postgresql_release: "{{ postgresql_version.split('.')[0] }}"
+
+- name: Pre-installation system tasks
+  ansible.builtin.import_tasks: system.yml
+
+- name: Install PostgreSQL
+  ansible.builtin.import_tasks: install.yml
+
+- name: Configure PostgreSQL instance
+  ansible.builtin.import_tasks: configure.yml
+
+- name: Initialize PostgreSQL instance
+  ansible.builtin.import_tasks: initialize.yml
+
+- name: Manage PostgreSQL service
+  ansible.builtin.import_tasks: service.yml

@@ -1,0 +1,7 @@
+#-----------------------------------------------------------------------------------------
+# PostgreSQL ident (managed by Ansible)
+#-----------------------------------------------------------------------------------------
+# MAPNAME       SYSTEM-USERNAME         PG-USERNAME
+{% for entry in postgresql_ident_entries %}
+{{ entry.mapname }} {{ entry.system_username }} {{ entry.pg_username }}
+{% endfor %}

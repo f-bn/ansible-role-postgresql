@@ -1,0 +1,66 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Retrive system services status
+      ansible.builtin.service_facts:
+
+    - name: Check if PostgreSQL service is enabled and running
+      ansible.builtin.assert:
+        that:
+          - services["postgresql.service"]["state"] == "running"
+          - services["postgresql.service"]["status"] == "enabled"
+
+    - name: Check if PostgreSQL instance is responding
+      community.postgresql.postgresql_ping:
+        db: postgres
+      register: instance
+      failed_when: not instance.is_available
+      become: true
+      become_user: postgres
+
+    - name: Check if PostgreSQL instance is able to create database
+      community.postgresql.postgresql_db:
+        name: molecule_db
+        state: present
+      become: true
+      become_user: postgres
+
+    - name: Check if PostgreSQL instance is able to create role
+      community.postgresql.postgresql_user:
+        name: molecule_user
+        password: molecule
+        db: molecule_db
+        state: present
+      become: true
+      become_user: postgres
+
+    - name: Check if PostgreSQL instance is able to grant privileges on database objects
+      community.postgresql.postgresql_privs:
+        roles: molecule_user
+        privs: ALL
+        type: database
+        objs: molecule_db
+        database: molecule_db
+      become: true
+      become_user: postgres
+
+    - name: Check if PostgresSQL role is able to create schema
+      community.postgresql.postgresql_schema:
+        name: molecule
+        owner: molecule_user
+        database: molecule_db
+        login_user: molecule_user
+        login_password: molecule
+        login_host: localhost
+      become: true
+      become_user: postgres
+
+    - name: Check if PostgreSQL role is able to interact with the database
+      community.postgresql.postgresql_query:
+        db: molecule_db
+        query: "CREATE TABLE IF NOT EXISTS molecule.molecule_table (column_id SERIAL PRIMARY KEY, column1 VARCHAR (10) NOT NULL);"
+        login_user: molecule_user
+        login_password: molecule
+        login_host: localhost

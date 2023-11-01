@@ -1,0 +1,54 @@
+---
+- name: Ensure role dependencies are installed
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - ca-certificates
+      - python3-apt
+    state: present
+
+# Avoid automatic database initialization when installing packages (https://askubuntu.com/a/1393307)
+- name: Ensure /etc/postgresql-common directory exists
+  ansible.builtin.file:
+    path: /etc/postgresql-common
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Ensure automatic database initialization during packages installation is disabled
+  ansible.builtin.copy:
+    content: |
+      # Managed by Ansible
+      create_main_cluster = off
+    dest: /etc/postgresql-common/createcluster.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure APT keyrings directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Ensure PostgreSQL APT repository GPG key is imported
+  ansible.builtin.get_url:
+    url: "{{ postgresql_repo_gpgkey_url }}"
+    dest: /etc/apt/keyrings/postgresql-pgdg.asc
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure PostgreSQL APT repository is configured
+  ansible.builtin.apt_repository:
+    repo: "{{ postgresql_repo_url }}"
+    state: present
+    filename: postgresql-pgdg 
+
+- name: Ensure PostgreSQL server packages are installed
+  ansible.builtin.apt:
+    name: "{{ postgresql_packages }}"
+    state: present

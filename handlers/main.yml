@@ -1,0 +1,14 @@
+---
+# Handlers for 'postgresql' role
+
+- name: Restart PostgreSQL
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: restarted
+    daemon_reload: yes
+  when: postgresql_restart_on_changes
+
+- name: Reload PostgreSQL
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: reloaded

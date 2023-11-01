@@ -1,0 +1,15 @@
+#-----------------------------------------------------------------------------------------
+# PostgreSQL Host-based Access (managed by Ansible)
+#-----------------------------------------------------------------------------------------
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+local   all             all                                     {{ postgresql_hba_auth_local }}
+host    all             all             127.0.0.1/32            {{ postgresql_hba_auth_host }}
+host    all             all             ::1/128                 {{ postgresql_hba_auth_host }}
+local   replication     all                                     {{ postgresql_hba_auth_local }}
+host    replication     all             127.0.0.1/32            {{ postgresql_hba_auth_host }}
+host    replication     all             ::1/128                 {{ postgresql_hba_auth_host }}
+
+# Custom entries
+{% for entry in postgresql_hba_entries %}
+{{ entry.type }} {{ entry.db }} {{ entry.user }} {{ entry.address | default('') }} {{ entry.method }} {{ entry.auth_options | default('') }}
+{% endfor %}
