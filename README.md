@@ -2,7 +2,7 @@
 
 ### General informations
 
-Ansible role to install and configure standalone PostgreSQL server instance.
+Ansible role to install and configure standalone PostgreSQL server instance on target server(s).
 
 **Table of Contents**
 
