@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------------
 # GENERAL
 # -----------------------------------------------------------------------------
-postgresql_version: '16.0'
+postgresql_version: '16.1'
 postgresql_role: primary
 postgresql_cluster_name: null
 
