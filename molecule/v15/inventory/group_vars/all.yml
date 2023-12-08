@@ -2,14 +2,14 @@
 # Global variables for default Molecule scenario
 
 # - General -
-postgresql_version: '15.4'
+postgresql_version: '15.5'
 postgresql_restart_on_changes: true
 postgresql_cluster_name: molecule-15
 
 # - Repository and packages -
 postgresql_packages:
-  - "postgresql-{{ postgresql_release }}={{ postgresql_version }}-2.pgdg{{ ansible_distribution_version }}+1"
-  - "postgresql-client-{{ postgresql_release }}={{ postgresql_version }}-2.pgdg{{ ansible_distribution_version }}+1"
+  - "postgresql-{{ postgresql_release }}={{ postgresql_version }}-1.pgdg{{ ansible_distribution_version }}+1"
+  - "postgresql-client-{{ postgresql_release }}={{ postgresql_version }}-1.pgdg{{ ansible_distribution_version }}+1"
   - python3-psycopg2
   - libpq-dev
   - "postgresql-{{ postgresql_release }}-cron"

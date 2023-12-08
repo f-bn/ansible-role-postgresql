@@ -2,7 +2,7 @@
 # Global variables for default Molecule scenario
 
 # - General -
-postgresql_version: '16.0'
+postgresql_version: '16.1'
 postgresql_restart_on_changes: true
 postgresql_cluster_name: molecule-default
 
