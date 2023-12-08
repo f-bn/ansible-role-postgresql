@@ -1,4 +1,4 @@
-## Ansible role - Postgresql
+## Ansible role - PostgreSQL
 
 ### General informations
 
