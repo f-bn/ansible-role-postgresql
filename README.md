@@ -37,7 +37,7 @@ This role only supports Ubuntu Server LTS platforms:
 
 | Name                              | Default                      | Description                                                      |
 | :-------------------------------- | :--------------------------- | :--------------------------------------------------------------- |
-| `postgresql_version`              | `16.0`                       | Defines the package version of PostgreSQL to install             |
+| `postgresql_version`              | `16.1`                       | Defines the package version of PostgreSQL to install             |
 | `postgresql_role`                 | `primary`                    | Defines the role of the instance (`primary` or `standby`). This adjust few settings to prepare instance for replication depending on the given role. Set this to `primary` for standalone instance(s) |
 | `postgresql_cluster_name`         | `null`                       | Sets a name that identifies this database cluster (instance) for various purposes. The cluster name appears in the process title for all server processes in this cluster. Moreover, it is the default application name for a standby connection |
 | `postgresql_root_dir`             | `/var/lib/postgresql`        | Defines the root directory where everything related to the PostgreSQL instance is stored |
@@ -369,7 +369,7 @@ postgresql_wal_dir: "{{ postgresql_root_dir }}/{{ postgresql_release }}/wal"
     - name: postgresql
       src: https://github.com/f-bn/ansible-role-postgresql.git
       scm: git
-      version: '1.0.0'
+      version: '1.1.0'
 
   $ ansible-galaxy install-f -r requirements.yml
   ```
